@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Marketplace{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">MarketPlace</div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Products</a>
+            <a href="#" class="nav-link">Sellers</a>
+
+            {% if user.is_authenticated %}
+            <span
+                class="role-badge {% if user.is_seller %}role-seller{% elif user.is_customer %}role-customer{% else %}role-admin{% endif %}">
+                {{ user.username }}
+            </span>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-nav"
+                    style="background:none; border:none; color:var(--text-main); font-weight:500; padding:0; cursor:pointer;">Log
+                    Out</button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}" class="nav-link">Log In</a>
+            <a href="{% url 'users:signup' %}" class="btn-nav">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="main-content">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+
+</html>

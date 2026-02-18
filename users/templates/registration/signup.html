@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up | Marketplace{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h2>Join Marketplace</h2>
+    <p class="mb-4">Choose your account type</p>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <a href="customer/" class="btn" style="text-align: center; background: #3b82f6;">
+        <div style="font-size: 1.1rem;">Customer</div>
+        <div style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">I want to browse and buy products</div>
+      </a>
+
+      <a href="seller/" class="btn" style="text-align: center; background: #10b981;">
+        <div style="font-size: 1.1rem;">Seller</div>
+        <div style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">I want to list and sell items</div>
+      </a>
+    </div>
+
+    <p class="mt-4" style="font-size: 0.875rem;">
+      Existing user? <a href="{% url 'login' %}">Log In</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

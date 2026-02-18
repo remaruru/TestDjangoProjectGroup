@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | Marketplace{% endblock %}
+
+{% block content %}
+<div class="hero">
+    {% if user.is_authenticated %}
+    <h1>Welcome back, <span class="text-primary">{{ user.username }}</span>!</h1>
+    <p>Explore the best products or manage your store.</p>
+
+    <div class="mt-4">
+        {% if user.is_customer %}
+        <span class="role-badge role-customer">Customer Account</span>
+        {% elif user.is_seller %}
+        <span class="role-badge role-seller">Seller Account</span>
+        <a href="#" class="btn btn-primary mt-4" style="max-width:200px;">Go to Dashboard</a>
+        {% else %}
+        <span class="role-badge role-admin">Administrator</span>
+        {% endif %}
+    </div>
+    {% else %}
+    <h1>Welcome to Marketplace</h1>
+    <p>Discover unique products from trusted sellers around the world.</p>
+    <div class="mt-4" style="display:flex; gap:1rem; justify-content:center;">
+        <a href="{% url 'users:signup' %}" class="btn" style="max-width:200px;">Get Started</a>
+        <a href="{% url 'login' %}" class="btn btn-secondary" style="max-width:200px;">Log In</a>
+    </div>
+    {% endif %}
+</div>
+
+<div class="grid">
+    <div class="card">
+        <h3>Featured Products</h3>
+        <p>Browse our hand-picked selection of top-rated items.</p>
+        <button class="btn-secondary" style="margin-top:1rem;">View Collection</button>
+    </div>
+
+    <div class="card">
+        <h3>Become a Seller</h3>
+        <p>Start your own business today and reach millions of customers.</p>
+        <button class="btn-secondary" style="margin-top:1rem;">Learn More</button>
+    </div>
+
+    <div class="card">
+        <h3>Safe & Secure</h3>
+        <p>We ensure every transaction is protected with top-tier security.</p>
+    </div>
+</div>
+{% endblock %}
