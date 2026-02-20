@@ -1,3 +1,16 @@
+# CIT 511-IT32S1 - Web Systems and Technologies 2
+
+**W9 Group Project: Develop your First Django Project**
+
+### Submitted by
+*   **Roldan, Earl Angelo L.**
+*   **Arrogante, Fritz C.**
+*   **Rosales, Enzo Benedict T.**
+*   **Salazar, Maria Cielo L.**
+*   **Torres, Michael Angelo T.**
+
+---
+
 # Online Marketplace
 
 ## Project Overview
