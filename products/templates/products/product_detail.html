@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}{{ product.title }} | NovaMarket{% endblock %}
-
+{% block title %}
+{{ product.title }}
+| NovaMarket{% endblock %}
 {% block content %}
 <div class="product-detail-layout" style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem; margin-bottom:4rem;">
-    <!-- Gallery -->
     <div class="product-gallery">
         <div class="main-image-wrapper"
             style="width:100%; aspect-ratio:1; border-radius:12px; overflow:hidden; border:1px solid var(--border-color);">
@@ -18,63 +17,63 @@
             {% endif %}
         </div>
     </div>
-
-    <!-- Info -->
     <div class="product-info-column">
         <div class="product-category"
             style="margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.05em; font-size:0.8rem; color:var(--text-tertiary);">
             {{ product.category.name|default:"Uncategorized" }}
         </div>
-
-        <h1 class="product-title" style="font-size:2rem; margin-bottom:1rem; font-weight:800;">{{ product.title }}</h1>
-
+        <h1 class="product-title" style="font-size:2rem; margin-bottom:1rem; font-weight:800;">
+            {{ product.title }}
+        </h1>
         <div class="product-rating" style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;">
-            <div style="display:flex; color:#F59E0B;">
-                ★★★★☆
-            </div>
+            <div style="display:flex; color:#F59E0B;">★★★★☆</div>
             <span style="color:var(--text-secondary); font-size:0.9rem;">(24 reviews)</span>
         </div>
-
         <div class="product-price"
-            style="font-size:1.75rem; color:var(--primary); font-weight:800; margin-bottom:1.5rem;">
-            ${{ product.price }}
+            style="font-size:1.75rem; color:var(--primary); font-weight:800; margin-bottom:1.5rem;">$
+            {{ product.price }}
         </div>
-
         <p class="product-description" style="color:var(--text-secondary); line-height:1.6; margin-bottom:2rem;">
             {{ product.description }}
         </p>
-
-        <div class="product-actions" style="display:flex; gap:1rem; margin-bottom:2rem;">
-            <div class="quantity-selector"
-                style="display:flex; align-items:center; border:1px solid var(--border-color); border-radius:8px; padding:0 0.5rem;">
-                <button style="background:none; border:none; padding:0.5rem; cursor:pointer;">-</button>
-                <input type="number" value="1"
-                    style="width:40px; text-align:center; border:none; -moz-appearance:textfield;">
-                <button style="background:none; border:none; padding:0.5rem; cursor:pointer;">+</button>
-            </div>
-
-            <button class="btn btn-primary" style="flex:1;">Add to Cart</button>
-            <button class="btn btn-secondary"
-                style="width:50px; display:flex; align-items:center; justify-content:center;">♡</button>
+        <div class="product-actions" style="margin-bottom:2rem;">
+            <form action="{% url 'orders:add_to_cart' product.id %}" method="post" style="display:flex; gap:1rem;">
+                {% csrf_token %}
+                <div class="quantity-selector"
+                    style="display:flex; align-items:center; border:1px solid var(--border-color); border-radius:8px; padding:0 0.5rem;">
+                    <button type="button" onclick="this.parentNode.querySelector('input').stepDown()"
+                        style="background:none; border:none; padding:0.5rem; cursor:pointer;">-</button>
+                    <input type="number" name="quantity" value="1" min="1"
+                        style="width:40px; text-align:center; border:none; -moz-appearance:textfield; appearance:textfield;">
+                    <button type="button" onclick="this.parentNode.querySelector('input').stepUp()"
+                        style="background:none; border:none; padding:0.5rem; cursor:pointer;">+</button>
+                </div>
+                <button type="submit" class="btn btn-primary" style="flex:1;">Add to Cart</button>
+                <button type="button" class="btn btn-secondary"
+                    style="width:50px; display:flex; align-items:center; justify-content:center;">♡</button>
+            </form>
         </div>
-
-        <div class="seller-info" style="border-top:1px solid var(--border-color); padding-top:1.5rem; margin-top:2rem;">
-            <div style="display:flex; align-items:center; gap:1rem;">
+        <div class="seller-info" style="border-top: 1px solid #f3f4f6; padding-top: 1.5rem; margin-top: 2rem;">
+            <div
+                style="display: flex; align-items: center; gap: 1rem; background: #f9fafb; padding: 1rem; border-radius: 12px; border: 1px solid #f3f4f6;">
                 <div class="seller-avatar"
-                    style="width:40px; height:40px; background:var(--primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">
+                    style="width: 48px; height: 48px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);">
                     {{ product.seller.username|first|upper }}
                 </div>
                 <div>
-                    <div style="font-weight:600; font-size:0.9rem;">Sold by {{ product.seller.username }}</div>
-                    <div style="font-size:0.8rem; color:var(--text-tertiary);">Member since {{
-                        product.seller.date_joined|date:"M Y" }}</div>
+                    <div style="font-weight: 700; font-size: 1rem; color: #111827;">
+                        Seller:
+                        {{ product.seller.username }}
+                    </div>
+                    <div style="font-size: 0.85rem; color: #6b7280; margin-top: 0.1rem;">
+                        Member since
+                        {{ product.seller.date_joined|date:"F Y" }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Related Products -->
 <h3 style="margin-bottom:1.5rem;">You might also like</h3>
 <div class="product-grid" style="grid-template-columns: repeat(4, 1fr);">
     {% for related in related_products %}
@@ -88,12 +87,14 @@
             {% endif %}
         </a>
         <div class="card-content">
-            <a href="{% url 'products:detail' related.pk %}" class="product-title" style="font-size:0.9rem;">{{
-                related.title }}</a>
-            <div class="product-price" style="font-size:1rem;">${{ related.price }}</div>
+            <a href="{% url 'products:detail' related.pk %}" class="product-title" style="font-size:0.9rem;">
+                {{ related.title }}
+            </a>
+            <div class="product-price" style="font-size:1rem;">$
+                {{ related.price }}
+            </div>
         </div>
     </div>
     {% endfor %}
 </div>
-
 {% endblock %}

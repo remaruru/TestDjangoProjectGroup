@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Your Shopping Cart | NovaMarket{% endblock %}
+{% block content %}
+<div style="max-width: 1000px; margin: 3rem auto; padding: 0 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+        <div>
+            <h1 style="margin: 0; font-weight: 800; color: #111827; font-size: 2.25rem;">Shopping Cart</h1>
+            <p style="color: #6b7280; margin-top: 0.5rem;">Review your items before sending offers to sellers.</p>
+        </div>
+        <a href="{% url 'products:list' %}"
+            style="color: #4f46e5; font-weight: 600; text-decoration: none; font-size: 0.95rem;">← Continue Shopping</a>
+    </div>
+    {% if cart_items %}
+    <div style="display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start;">
+        <div
+            style="background: white; border-radius: 20px; border: 1px solid #e5e7eb; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+            <div style="padding: 1.5rem; border-bottom: 1px solid #f3f4f6;">
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;">Items (
+                    {{ cart_items|length }}
+                    )</h3>
+            </div>
+            {% for item in cart_items %}
+            <div style="padding: 1.5rem; display: flex; gap: 1.5rem; border-bottom: 1px solid #f3f4f6;">
+                <div
+                    style="width: 100px; height: 100px; border-radius: 12px; overflow: hidden; border: 1px solid #f3f4f6; flex-shrink: 0;">
+                    {% if item.product.image_url %}
+                    <img src="{{ item.product.image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                    <div
+                        style="width: 100%; height: 100%; background: #f3f4f6; display: flex; align-items: center; justify-content: center; color: #9ca3af; font-size: 0.8rem;">
+                        No Image</div>
+                    {% endif %}
+                </div>
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <h4 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #111827;">
+                                {{ item.product.title }}
+                            </h4>
+                            <p style="margin: 0; font-weight: 700; color: #111827;">$
+                                {{ item.total }}
+                            </p>
+                        </div>
+                        <p style="color: #6b7280; font-size: 0.85rem; margin-top: 0.25rem;">Seller:
+                            {{ item.product.seller.username }}
+                        </p>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.9rem; color: #374151;">Qty: <strong>
+                                {{ item.quantity }}
+                            </strong> × $
+                            {{ item.product.price }}
+                        </span>
+                        <a href="{% url 'orders:remove_from_cart' item.product.id %}"
+                            style="color: #dc2626; font-size: 0.85rem; font-weight: 600; text-decoration: none;">Remove</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div
+            style="background: white; border-radius: 20px; border: 1px solid #e5e7eb; padding: 1.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
+            <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem; font-weight: 700;">Summary</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: #4b5563;">
+                <span>Subtotal</span><span>$
+                    {{ total }}
+                </span>
+            </div>
+            <div
+                style="border-top: 2px solid #f3f4f6; padding-top: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700; font-size: 1.1rem;">Total</span><span
+                    style="font-weight: 800; font-size: 1.5rem; color: #4f46e5;">$
+                    {{ total }}
+                </span>
+            </div>
+            <form action="{% url 'orders:checkout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit"
+                    style="width: 100%; padding: 1rem; background: #4f46e5; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer;">Send
+                    Offers to Sellers</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div
+        style="text-align: center; padding: 5rem 2rem; background: white; border-radius: 20px; border: 1px solid #e5e7eb;">
+        <h2 style="font-weight: 700; color: #111827; margin-bottom: 0.5rem;">Your cart is empty</h2>
+        <a href="{% url 'products:list' %}"
+            style="display: inline-block; padding: 0.75rem 2rem; background: #4f46e5; color: white; text-decoration: none; border-radius: 12px; font-weight: 600;">Start
+            Shopping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

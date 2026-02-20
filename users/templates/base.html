@@ -6,40 +6,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}NovaMarket{% endblock %}</title>
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=1.4">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=1.6">
+    <style>
+        .notif-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 1px solid white;
+        }
+    </style>
 </head>
 
 <body>
-
-    <!-- Header / Navbar -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-left">
                 <a href="{% url 'home' %}" class="nav-brand">NovaMarket</a>
-
                 <div class="search-bar-wrapper">
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    <input type="text" class="search-input" placeholder="Search for products, brands...">
+                    <input type="text" class="search-input" placeholder="Search products...">
                 </div>
             </div>
-
             <div class="nav-right">
-                <!-- Desktop Nav Items -->
                 <div class="nav-items-desktop">
                     <div style="position:relative;">
-                        <a href="#" class="nav-link" onclick="toggleDropdown('cat-dropdown'); return false;">Categories
-                            ▾</a>
+                        <button class="nav-link" onclick="toggleDropdown('cat-dropdown')"
+                            style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:inherit; color:inherit;">Categories
+                            ▾</button>
                         <div id="cat-dropdown" class="dropdown-menu"
                             style="display:none; position:absolute; top:100%; left:0; background:white; border:1px solid #e5e7eb; border-radius:8px; box-shadow:0 10px 15px -3px rgba(0,0,0,0.1); width:200px; padding:0.5rem 0; z-index:100;">
                             <a href="{% url 'home' %}"
@@ -54,187 +58,143 @@
                                 & Living</a>
                         </div>
                     </div>
-
                     {% if user.is_authenticated %}
                     {% if user.is_seller %}
                     <a href="{% url 'users:dashboard' %}" class="btn-nav-primary"
-                        style="background-color: var(--primary); color: white;">Seller Dashboard</a>
+                        style="background-color: var(--primary); color: white; text-decoration:none; padding:0.5rem 1rem; border-radius:8px;">Seller
+                        Dashboard</a>
                     {% else %}
                     <a href="{% url 'users:dashboard' %}" class="nav-link"
-                        style="color:var(--text-primary); font-weight:600;">My Orders</a>
+                        style="color:var(--text-primary); font-weight:600; text-decoration:none;">My Orders</a>
                     {% endif %}
                     {% else %}
-                    {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' and request.resolver_match.url_name != 'customer_signup' and request.resolver_match.url_name != 'seller_signup' %}
-                    <a href="{% url 'users:seller_signup' %}" class="btn-nav-primary">Become a Seller</a>
-                    {% endif %}
+                    <a href="{% url 'users:seller_signup' %}" class="btn-nav-primary"
+                        style="text-decoration:none; padding:0.5rem 1rem; border-radius:8px;">Become a Seller</a>
                     {% endif %}
                 </div>
-
-                <!-- Icons -->
                 <div class="nav-icons">
                     {% if user.is_authenticated %}
-
-                    <!-- Notification Bell -->
                     <div style="position:relative;">
-                        <a href="#" class="nav-icon-link" aria-label="Notifications"
-                            onclick="toggleDropdown('notif-dropdown'); return false;">
+                        <button class="nav-icon-link" onclick="toggleDropdown('notif-dropdown')"
+                            style="background:none; border:none; cursor:pointer; color:inherit;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
-                            <!-- Dot -->
-                            <span
-                                style="position:absolute; top:2px; right:2px; width:8px; height:8px; background:#ef4444; border-radius:50%; border:1px solid white;"></span>
-                        </a>
-
-                        <!-- Notification Dropdown Modal -->
+                            {% if notifications %}
+                            <span class="notif-badge"></span>
+                            {% endif %}
+                        </button>
                         <div id="notif-dropdown" class="dropdown-menu"
                             style="display:none; position:absolute; top:140%; right:-10px; background:white; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 10px 15px -3px rgba(0,0,0,0.1); width:320px; z-index:1000;">
                             <div
                                 style="padding:1rem; border-bottom:1px solid #f3f4f6; font-weight:600; font-size:0.95rem;">
                                 Notifications</div>
                             <div style="max-height:300px; overflow-y:auto;">
+                                {% if notifications %}
+                                {% for notif in notifications %}
                                 <div
-                                    style="padding:1rem; border-bottom:1px solid #f9fafb; display:flex; gap:0.75rem; align-items:start;">
+                                    style="padding:1.25rem; border-bottom:1px solid #f9fafb; display:flex; gap:0.75rem; align-items:start;">
                                     <div
-                                        style="width:8px; height:8px; background:#3b82f6; border-radius:50%; margin-top:6px; flex-shrink:0;">
+                                        style="width:8px; height:8px; background:#4f46e5; border-radius:50%; margin-top:6px; flex-shrink:0;">
                                     </div>
                                     <div>
-                                        <div style="font-size:0.9rem; font-weight:500;">Welcome to NovaMarket!</div>
-                                        <div style="font-size:0.8rem; color:#6b7280; margin-top:0.25rem;">Complete your
-                                            profile to get started with buying or selling.</div>
+                                        <div style="font-size:0.9rem; font-weight:600; color:#111827;">
+                                            {{ notif.message }}
+                                        </div>
+                                        <div style="font-size:0.75rem; color:#6b7280; margin-top:0.25rem;">
+                                            {{ notif.created_at|timesince }}
+                                            ago</div>
                                     </div>
                                 </div>
-                                <div style="padding:1rem; display:flex; gap:0.75rem; align-items:start;">
-                                    <div
-                                        style="width:8px; height:8px; background:#10b981; border-radius:50%; margin-top:6px; flex-shrink:0;">
-                                    </div>
-                                    <div>
-                                        <div style="font-size:0.9rem; font-weight:500;">System Update</div>
-                                        <div style="font-size:0.8rem; color:#6b7280; margin-top:0.25rem;">We've updated
-                                            our dashboard features. Check them out!</div>
-                                    </div>
-                                </div>
+                                {% endfor %}
+                                {% else %}
+                                <div style="padding:2rem; text-align:center; color:#9ca3af; font-size:0.9rem;">No new
+                                    notifications</div>
+                                {% endif %}
                             </div>
                             <div style="padding:0.75rem; text-align:center; border-top:1px solid #f3f4f6;">
-                                <a href="#"
-                                    style="font-size:0.85rem; font-weight:600; color:#4F46E5; text-decoration:none;">Mark
-                                    all as read</a>
+                                <a href="{% url 'users:dashboard' %}"
+                                    style="font-size:0.85rem; font-weight:600; color:#4F46E5; text-decoration:none;">View
+                                    all activity</a>
                             </div>
                         </div>
                     </div>
-
-                    <a href="#" class="nav-icon-link" aria-label="Cart">
+                    <a href="{% url 'orders:cart_detail' %}" class="nav-icon-link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                     </a>
-
                     <a href="{% url 'users:profile' %}" class="user-avatar" title="{{ user.username }}"
-                        style="text-decoration:none;">
-                        {{ user.username|make_list|first|upper }}
+                        style="text-decoration:none; display:flex; align-items:center; justify-content:center; width:32px; height:32px; background:#4f46e5; color:white; border-radius:50%; font-weight:700;">
+                        {{ user.username|first|upper }}
                     </a>
-
                     <form action="{% url 'logout' %}" method="post" style="display:inline; margin-left:0.5rem;">
                         {% csrf_token %}
                         <button type="submit"
                             style="background:none; border:none; color:var(--text-tertiary); cursor:pointer; font-size:0.85rem; font-weight:500;">Exit</button>
                     </form>
-
                     {% else %}
-                    {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' and request.resolver_match.url_name != 'customer_signup' and request.resolver_match.url_name != 'seller_signup' %}
-                    <a href="{% url 'login' %}" class="nav-link-login"
+                    <a href="{% url 'login' %}"
                         style="margin-right:1rem; font-weight:600; color:var(--text-primary); text-decoration:none;">Log
                         In</a>
                     <a href="{% url 'users:signup' %}" class="btn btn-primary"
-                        style="padding:0.5rem 1rem; font-size:0.9rem;">Sign Up</a>
-                    {% endif %}
+                        style="padding:0.5rem 1rem; font-size:0.9rem; text-decoration:none; border-radius:8px;">Sign
+                        Up</a>
                     {% endif %}
                 </div>
             </div>
         </div>
     </nav>
-
-    <!-- Main Content -->
     <main class="main-wrapper">
         {% if messages %}
-        <div class="messages-container">
-            <ul class="messages" style="list-style:none; padding:0;">
-                {% for message in messages %}
-                <li class="message {{ message.tags }}"
-                    style="padding:1rem; margin-bottom:1rem; border-radius:8px; background:#EFF6FF; color:#1E40AF;">{{
-                    message }}</li>
-                {% endfor %}
-            </ul>
+        <div class="messages-container" style="max-width: 1200px; margin: 1rem auto; padding: 0 1rem;">
+            {% for message in messages %}
+            <div
+                style="padding:1rem; margin-bottom:1rem; border-radius:8px; background:#f0f9ff; color:#0369a1; border:1px solid #bae6fd; font-weight:500;">
+                {{ message }}
+            </div>
+            {% endfor %}
         </div>
         {% endif %}
-
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
-
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-grid">
                 <div class="footer-col brand-col">
                     <h4 class="footer-brand">NovaMarket</h4>
-                    <p>Your trusted marketplace for unique products.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Support</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Safety Center</a></li>
-                        <li><a href="#">Community Guidelines</a></li>
-                    </ul>
+                    <p>Your trusted marketplace.</p>
                 </div>
                 <div class="footer-col">
                     <h4>Legal</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Connect</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Instagram</a></li>
-                        <li><a href="#">Facebook</a></li>
+                    <ul class="footer-links" style="list-style:none; padding:0;">
+                        <li><a href="#" style="text-decoration:none; color:inherit;">Terms</a></li>
+                        <li><a href="#" style="text-decoration:none; color:inherit;">Privacy</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-bottom">
-                &copy; {% now "Y" %} NovaMarket. All rights reserved.
-            </div>
+            <div class="footer-bottom"
+                style="margin-top:2rem; border-top:1px solid #e5e7eb; padding-top:1rem; text-align:center; color:#6b7280;">
+                &copy;
+                {% now "Y" %}
+                NovaMarket.</div>
         </div>
     </footer>
-
     <script>
         function toggleDropdown(id) {
             var dropdown = document.getElementById(id);
             if (!dropdown) return;
             var isHidden = dropdown.style.display === "none" || !dropdown.style.display;
-
-            // Close all
-            var allDropdowns = document.querySelectorAll('.dropdown-menu');
-            allDropdowns.forEach(function (d) { d.style.display = 'none'; });
-
-            // Toggle clicked
-            if (isHidden) {
-                dropdown.style.display = "block";
-            }
+            document.querySelectorAll('.dropdown-menu').forEach(function (d) { d.style.display = 'none'; });
+            if (isHidden) dropdown.style.display = "block";
         }
-
-        // Close on outside click
         document.addEventListener('click', function (event) {
-            if (!event.target.closest('.dropdown-trigger') && !event.target.closest('.shopping-cart-icon') && !event.target.closest('.nav-icon-link') && !event.target.closest('.dropdown-menu')) {
-                var allDropdowns = document.querySelectorAll('.dropdown-menu');
-                allDropdowns.forEach(function (d) { d.style.display = 'none'; });
+            if (!event.target.closest('.dropdown-menu') && !event.target.closest('.nav-link') && !event.target.closest('.nav-icon-link')) {
+                document.querySelectorAll('.dropdown-menu').forEach(function (d) { d.style.display = 'none'; });
             }
         });
     </script>

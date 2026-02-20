@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Edit {{ object.title }}{% else %}Add New Product{% endif %} | NovaMarket{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; background: #f3f4f6; padding: 3rem 1rem;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div
+            style="background: white; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden; border: 1px solid #e5e7eb;">
+            <!-- Header -->
+            <div
+                style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 3rem 2.5rem; color: white; position: relative;">
+                <h1 style="margin: 0; font-size: 2.25rem; font-weight: 800; color: white;">
+                    {% if object %}Edit Product{% else %}List a New Product{% endif %}
+                </h1>
+                <p style="margin: 0.75rem 0 0 0; opacity: 0.9; font-size: 1.1rem; color: rgba(255,255,255,0.9);">
+                    Scale your business by reaching our global community of buyers.
+                </p>
+                <!-- Decorative element -->
+                <div
+                    style="position: absolute; top: -20px; right: -20px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%;">
+                </div>
+            </div>
+
+            <form method="post" style="padding: 3rem; background: white;" class="product-form">
+                {% csrf_token %}
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <!-- Full Width -->
+                    <div style="grid-column: span 2;">
+                        <label class="field-label">Product Title</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                        <div class="error-msg">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Category Row -->
+                    <div>
+                        <label class="field-label">Select Category</label>
+                        {{ form.category }}
+                        {% if form.category.errors %}
+                        <div class="error-msg">{{ form.category.errors }}</div>
+                        {% endif %}
+                        <small style="display:block; margin-top:0.5rem; color:#6b7280;">Choose an existing one</small>
+                    </div>
+
+                    <div>
+                        <label class="field-label">Or Create New</label>
+                        {{ form.new_category }}
+                        {% if form.new_category.errors %}
+                        <div class="error-msg">{{ form.new_category.errors }}</div>
+                        {% endif %}
+                        <small style="display:block; margin-top:0.5rem; color:#6b7280;">Type to create
+                            on-the-fly</small>
+                    </div>
+
+                    <!-- Details Row -->
+                    <div>
+                        <label class="field-label">Price ($)</label>
+                        <div style="position:relative;">
+                            <span
+                                style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:#9ca3af; font-weight:600;">$</span>
+                            {{ form.price }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="field-label">Stock Available</label>
+                        {{ form.stock }}
+                    </div>
+
+                    <!-- Description -->
+                    <div style="grid-column: span 2;">
+                        <label class="field-label">Product Description</label>
+                        {{ form.description }}
+                    </div>
+
+                    <!-- Media -->
+                    <div style="grid-column: span 2;">
+                        <label class="field-label">Image URL</label>
+                        {{ form.image_url }}
+                        <p style="margin-top:0.5rem; color:#6b7280; font-size:0.85rem;">For best results, use
+                            high-quality rectangular images.</p>
+                    </div>
+
+                    <!-- Status -->
+                    <div
+                        style="grid-column: span 2; display: flex; align-items: center; background: #f9fafb; padding: 1.25rem; border-radius: 12px; border: 1px solid #f3f4f6;">
+                        <div class="checkbox-wrapper">
+                            {{ form.is_active }}
+                        </div>
+                        <label
+                            style="margin-left: 1rem; font-weight: 600; color: #374151; cursor: pointer; user-select: none;"
+                            for="{{ form.is_active.id_for_label }}">
+                            Make this listing active immediately
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Footer Actions -->
+                <div
+                    style="margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid #f3f4f6; display: flex; gap: 1.25rem; justify-content: flex-end;">
+                    <a href="{% url 'users:dashboard' %}" class="btn-secondary">
+                        Discard Changes
+                    </a>
+                    <button type="submit" class="btn-primary-form">
+                        {% if object %}Update Listing{% else %}Publish Listing{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .field-label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        color: #1f2937;
+        font-size: 0.95rem;
+        letter-spacing: -0.01em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.875rem 1.25rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        font-size: 1rem;
+        color: #111827;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        box-sizing: border-box;
+    }
+
+    input#id_price {
+        padding-left: 2rem !important;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        background: white;
+    }
+
+    .form-control::placeholder {
+        color: #9ca3af;
+    }
+
+    .error-msg {
+        color: #dc2626;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+        width: 1.5rem;
+        height: 1.5rem;
+        accent-color: #4f46e5;
+        cursor: pointer;
+    }
+
+    .btn-primary-form {
+        padding: 1rem 2.5rem;
+        border-radius: 12px;
+        border: none;
+        background: #4f46e5;
+        color: white;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-primary-form:hover {
+        background: #4338ca;
+        transform: translateY(-2px);
+        box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4);
+    }
+
+    .btn-secondary {
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        border: 2px solid #e5e7eb;
+        background: white;
+        color: #4b5563;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .btn-secondary:hover {
+        border-color: #d1d5db;
+        background: #f9fafb;
+        color: #1f2937;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+</style>
+{% endblock %}

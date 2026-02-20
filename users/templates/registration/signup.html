@@ -6,13 +6,19 @@
 <div class="auth-wrapper">
   <div class="auth-card">
     <div class="auth-header">
+      {% if is_social_auth %}
+      <h2>{{ social_title }}</h2>
+      <p>Please select your account type before we finish logging you in with Google.</p>
+      {% else %}
       <h2>Join NovaMarket</h2>
       <p>Choose your account type to get started</p>
+      {% endif %}
     </div>
 
     <div class="signup-options">
       <!-- Customer Card -->
-      <a href="customer/" class="signup-card-link">
+      <a href="{% if is_social_auth %}{% url 'users:set_role_customer' %}{% else %}{% url 'users:customer_signup' %}{% endif %}"
+        class="signup-card-link">
         <div class="signup-card-icon" style="background-color: #E0E7FF; color: #4F46E5;">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
@@ -27,7 +33,8 @@
       </a>
 
       <!-- Seller Card -->
-      <a href="seller/" class="signup-card-link">
+      <a href="{% if is_social_auth %}{% url 'users:set_role_seller' %}{% else %}{% url 'users:seller_signup' %}{% endif %}"
+        class="signup-card-link">
         <div class="signup-card-icon" style="background-color: #DCFCE7; color: #166534;">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
@@ -41,9 +48,11 @@
       </a>
     </div>
 
+    {% if not is_social_auth %}
     <p style="margin-top:2rem; text-align:center; font-size:0.9rem; color:var(--text-secondary);">
       Existing user? <a href="{% url 'login' %}">Log In</a>
     </p>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
