@@ -1,6 +1,6 @@
 # Project Progress Report
 
-**Project Title:** Online Marketplace System
+**Project Title:** NovaMarket - Online Marketplace System
 
 **Team Members:** (To be filled by group)
 
@@ -24,12 +24,17 @@
 - Configured Google OAuth2 backend (requires API keys).
 - Added "Sign in with Google" button to login page.
 
-### 4. User Interface
-- Designed a modern, responsive UI using custom CSS variables and Flexbox.
-- Implemented a base template with a consistent header/footer structure.
-- Applied "Glassmorphism" inspired design elements with gradients and card layouts.
+### 4. User Interface (New Design System Implemented)
+- **Branding:** Updated project name to "NovaMarket". Applied new design system with Inter font, rounded corners (12px), and pill-shaped elements.
+- **Color Palette:** Implemented "Modern SaaS" palette with Primary (#4F46E5), Secondary (#F9FAFB), and Accent (#F97316).
+- **Layout:**
+  - **Sticky Header:** Includes Logo, Search Bar, Category Dropdown, and Action Icons (Cart, Notifications).
+  - **Hero Section:** Added dynamic hero banner with call-to-action buttons.
+  - **Sidebar Filters:** Implemented sidebar for filtering products by Price, Category, and Rating.
+  - **Product Grid:** Responsive grid layout for showcasing products.
+- **Components:** styled buttons, inputs, and cards to match the design specification.
 
 ### 5. Next Steps
-- Implement Product models and listing functionality.
+- Implement Product models and dynamic listing functionality (currently static placeholders).
 - Develop the Shopping Cart and Checkout system.
 - Build the Seller Dashboard for managing inventory.

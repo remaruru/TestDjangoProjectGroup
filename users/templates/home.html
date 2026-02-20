@@ -1,49 +1,203 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashboard | Marketplace{% endblock %}
+{% block title %}Explore | NovaMarket{% endblock %}
 
 {% block content %}
+<!-- Hero Section -->
 <div class="hero">
-    {% if user.is_authenticated %}
-    <h1>Welcome back, <span class="text-primary">{{ user.username }}</span>!</h1>
-    <p>Explore the best products or manage your store.</p>
-
-    <div class="mt-4">
-        {% if user.is_customer %}
-        <span class="role-badge role-customer">Customer Account</span>
-        {% elif user.is_seller %}
-        <span class="role-badge role-seller">Seller Account</span>
-        <a href="#" class="btn btn-primary mt-4" style="max-width:200px;">Go to Dashboard</a>
-        {% else %}
-        <span class="role-badge role-admin">Administrator</span>
-        {% endif %}
+    <div class="hero-content">
+        <h1>Discover Unique Products from<br>Trusted Sellers</h1>
+        <p>Shop smarter. Sell faster. Grow globally.</p>
+        <div class="hero-actions">
+            <button class="btn btn-primary">Start Shopping</button>
+            <button class="btn btn-secondary">Become a Seller</button>
+        </div>
     </div>
-    {% else %}
-    <h1>Welcome to Marketplace</h1>
-    <p>Discover unique products from trusted sellers around the world.</p>
-    <div class="mt-4" style="display:flex; gap:1rem; justify-content:center;">
-        <a href="{% url 'users:signup' %}" class="btn" style="max-width:200px;">Get Started</a>
-        <a href="{% url 'login' %}" class="btn btn-secondary" style="max-width:200px;">Log In</a>
-    </div>
-    {% endif %}
 </div>
 
-<div class="grid">
-    <div class="card">
-        <h3>Featured Products</h3>
-        <p>Browse our hand-picked selection of top-rated items.</p>
-        <button class="btn-secondary" style="margin-top:1rem;">View Collection</button>
-    </div>
+<!-- Main Content Area with Sidebar and Grid -->
+<div class="content-area">
 
-    <div class="card">
-        <h3>Become a Seller</h3>
-        <p>Start your own business today and reach millions of customers.</p>
-        <button class="btn-secondary" style="margin-top:1rem;">Learn More</button>
-    </div>
+    <!-- Filters Sidebar -->
+    <aside class="filters-sidebar">
+        <div class="sidebar-section">
+            <h5 class="sidebar-title">Price Range</h5>
+            <input type="range" class="range-slider" min="0" max="1000" id="priceRange">
+            <div
+                style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-light); margin-top:0.5rem;">
+                <span>$0</span>
+                <span>$1000+</span>
+            </div>
+        </div>
 
-    <div class="card">
-        <h3>Safe & Secure</h3>
-        <p>We ensure every transaction is protected with top-tier security.</p>
+        <div class="sidebar-section">
+            <h5 class="sidebar-title">Categories</h5>
+            <!-- Using simple checkboxes for demo -->
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox"> Electronics</label>
+                <label class="checkbox-label"><input type="checkbox"> Fashion</label>
+                <label class="checkbox-label"><input type="checkbox"> Home & Garden</label>
+                <label class="checkbox-label"><input type="checkbox"> Toys & Hobbies</label>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h5 class="sidebar-title">Rating</h5>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox"> ⭐ 4 Stars & Up</label>
+                <label class="checkbox-label"><input type="checkbox"> ⭐ 3 Stars & Up</label>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h5 class="sidebar-title">Location</h5>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox"> Domestic</label>
+                <label class="checkbox-label"><input type="checkbox"> International</label>
+            </div>
+        </div>
+
+        <button class="btn btn-secondary" style="width:100%; font-size:0.9rem;">Reset Filters</button>
+    </aside>
+
+    <!-- Product Grid -->
+    <div class="product-grid">
+        <!-- Static Product 1 -->
+        <div class="product-card">
+            <div style="position:relative;">
+                <img src="https://placehold.co/400x400/EEE/31343C?text=Minimalist+Lamp" class="card-image"
+                    alt="Product Image">
+                <span
+                    style="position:absolute; top:10px; right:10px; background:white; border-radius:50%; padding:0.25rem;">
+                    <!-- Wishlist Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                        stroke="var(--text-light)">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="product-meta">
+                    <span style="color:var(--text-light);">Home Decor</span>
+                    <span style="color:#F59E0B;">★ 4.8</span>
+                </div>
+                <h3 class="product-name">Modern Minimalist Lamp</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="product-price">$45.00</span>
+                    <button class="btn-icon-only" title="Add to Cart">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Static Product 2 -->
+        <div class="product-card">
+            <div style="position:relative;">
+                <img src="https://placehold.co/400x400/EEE/31343C?text=Wireless+Headphones" class="card-image"
+                    alt="Product Image">
+                <span
+                    style="position:absolute; top:10px; right:10px; background:white; border-radius:50%; padding:0.25rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                        stroke="var(--text-light)">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </span>
+                <span class="badg"
+                    style="position:absolute; top:10px; left:10px; background:var(--accent); color:white; font-size:0.7rem; font-weight:700; padding:0.2rem 0.5rem; border-radius:1rem;">-15%</span>
+            </div>
+            <div class="card-body">
+                <div class="product-meta">
+                    <span style="color:var(--text-light);">Electronics</span>
+                    <span style="color:#F59E0B;">★ 4.5</span>
+                </div>
+                <h3 class="product-name">Sonic Pro Headphones</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="product-price">$89.99 <span
+                            style="font-size:0.8rem; color:var(--text-light); text-decoration:line-through;">$105.00</span></span>
+                    <button class="btn-icon-only">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Static Product 3 -->
+        <div class="product-card">
+            <div style="position:relative;">
+                <img src="https://placehold.co/400x400/EEE/31343C?text=Smart+Watch" class="card-image"
+                    alt="Product Image">
+                <span
+                    style="position:absolute; top:10px; right:10px; background:white; border-radius:50%; padding:0.25rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                        stroke="var(--text-light)">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="product-meta">
+                    <span style="color:var(--text-light);">Wearables</span>
+                    <span style="color:#F59E0B;">★ 4.9</span>
+                </div>
+                <h3 class="product-name">FitTrack Series 5</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="product-price">$120.00</span>
+                    <button class="btn-icon-only">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Static Product 4 -->
+        <div class="product-card">
+            <div style="position:relative;">
+                <img src="https://placehold.co/400x400/EEE/31343C?text=Canvas+Sneakers" class="card-image"
+                    alt="Product Image">
+                <span
+                    style="position:absolute; top:10px; right:10px; background:white; border-radius:50%; padding:0.25rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                        stroke="var(--text-light)">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="product-meta">
+                    <span style="color:var(--text-light);">Footwear</span>
+                    <span style="color:#F59E0B;">★ 4.2</span>
+                </div>
+                <h3 class="product-name">Urban Canvas Low</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="product-price">$55.00</span>
+                    <button class="btn-icon-only">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}

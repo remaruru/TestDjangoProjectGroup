@@ -1,19 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Up | NovaMarket{% endblock %}
+{% block title %}Edit Profile | NovaMarket{% endblock %}
 
 {% block content %}
-<div class="auth-wrapper">
-    <div class="auth-card">
+<div class="auth-wrapper" style="padding:2rem 0;">
+    <div class="auth-card" style="max-width:600px;">
         <div class="auth-header">
-            <h2>Create an Account</h2>
-            <p>
-                {% if user_type == 'customer' %}
-                Start your shopping journey
-                {% else %}
-                Start your selling journey
-                {% endif %}
-            </p>
+            <h2>Edit Profile</h2>
+            <p>Update your personal information</p>
         </div>
 
         <form method="post" class="text-left">
@@ -29,20 +23,17 @@
             <div class="form-group">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
-                {% if field.help_text and not field.errors %}
-                <p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">{{ field.help_text }}</p>
-                {% endif %}
                 {% if field.errors %}
                 <div style="color:#ef4444; font-size:0.875rem; margin-top:0.25rem;">{{ field.errors }}</div>
                 {% endif %}
             </div>
             {% endfor %}
-            <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
-        </form>
 
-        <p style="margin-top:1.5rem; text-align:center; font-size:0.9rem; color:var(--text-secondary);">
-            Already have an account? <a href="{% url 'login' %}">Log In</a>
-        </p>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2rem;">
+                <a href="{% url 'users:dashboard' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

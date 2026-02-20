@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Seller Dashboard | NovaMarket{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper" style="padding: 2rem 0;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+        <h1>Seller Dashboard</h1>
+        <a href="#" class="btn btn-primary">+ Add New Product</a>
+    </div>
+
+    <!-- Quick Stats -->
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1.5rem; margin-bottom:2rem;">
+        <div class="card" style="padding:1.5rem; background:white; border-radius:12px; border:1px solid #e5e7eb;">
+            <div style="font-size:0.9rem; color:#6b7280; font-weight:600;">Total Sales</div>
+            <div style="font-size:2rem; font-weight:700; color:#111827;">{{ total_sales }}</div>
+        </div>
+        <div class="card" style="padding:1.5rem; background:white; border-radius:12px; border:1px solid #e5e7eb;">
+            <div style="font-size:0.9rem; color:#6b7280; font-weight:600;">Total Revenue</div>
+            <div style="font-size:2rem; font-weight:700; color:#4F46E5;">${{ revenue }}</div>
+        </div>
+        <div class="card" style="padding:1.5rem; background:white; border-radius:12px; border:1px solid #e5e7eb;">
+            <div style="font-size:0.9rem; color:#6b7280; font-weight:600;">Products Listed</div>
+            <div style="font-size:2rem; font-weight:700; color:#111827;">{{ my_products.count }}</div>
+        </div>
+    </div>
+
+    <!-- My Products -->
+    <div style="background:white; border-radius:12px; border:1px solid #e5e7eb; padding:1.5rem;">
+        <h3 style="margin-bottom:1rem;">My Products</h3>
+        {% if my_products %}
+        <table style="width:100%; border-collapse:collapse; font-size:0.95rem;">
+            <thead>
+                <tr style="border-bottom:2px solid #f3f4f6; text-align:left;">
+                    <th style="padding:0.75rem;">Product</th>
+                    <th style="padding:0.75rem;">Price</th>
+                    <th style="padding:0.75rem;">Stock</th>
+                    <th style="padding:0.75rem;">Status</th>
+                    <th style="padding:0.75rem;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in my_products %}
+                <tr style="border-bottom:1px solid #f3f4f6;">
+                    <td style="padding:0.75rem; font-weight:500;">{{ p.title }}</td>
+                    <td style="padding:0.75rem;">${{ p.price }}</td>
+                    <td style="padding:0.75rem;">{{ p.stock }}</td>
+                    <td style="padding:0.75rem;">
+                        <span
+                            style="background:{% if p.is_active %}#dcfce7{% else %}#fee2e2{% endif %}; color:{% if p.is_active %}#166534{% else %}#991b1b{% endif %}; padding:0.25rem 0.5rem; border-radius:99px; font-size:0.8rem; font-weight:600;">
+                            {% if p.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </td>
+                    <td style="padding:0.75rem;">
+                        <a href="#" style="color:#4F46E5; font-weight:600; font-size:0.85rem;">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div style="text-align:center; padding:2rem; color:#6b7280;">
+            <p>You haven't listed any products yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,26 +1,47 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Up | Marketplace{% endblock %}
+{% block title %}Sign Up | NovaMarket{% endblock %}
 
 {% block content %}
 <div class="auth-wrapper">
   <div class="auth-card">
-    <h2>Join Marketplace</h2>
-    <p class="mb-4">Choose your account type</p>
+    <div class="auth-header">
+      <h2>Join NovaMarket</h2>
+      <p>Choose your account type to get started</p>
+    </div>
 
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
-      <a href="customer/" class="btn" style="text-align: center; background: #3b82f6;">
-        <div style="font-size: 1.1rem;">Customer</div>
-        <div style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">I want to browse and buy products</div>
+    <div class="signup-options">
+      <!-- Customer Card -->
+      <a href="customer/" class="signup-card-link">
+        <div class="signup-card-icon" style="background-color: #E0E7FF; color: #4F46E5;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+        </div>
+        <div class="signup-card-content">
+          <h3>I want to Buy</h3>
+          <p>Browse millions of products, track orders, and create wishlists.</p>
+        </div>
       </a>
 
-      <a href="seller/" class="btn" style="text-align: center; background: #10b981;">
-        <div style="font-size: 1.1rem;">Seller</div>
-        <div style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">I want to list and sell items</div>
+      <!-- Seller Card -->
+      <a href="seller/" class="signup-card-link">
+        <div class="signup-card-icon" style="background-color: #DCFCE7; color: #166534;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+        </div>
+        <div class="signup-card-content">
+          <h3>I want to Sell</h3>
+          <p>Set up your shop, manage inventory, and grow your business.</p>
+        </div>
       </a>
     </div>
 
-    <p class="mt-4" style="font-size: 0.875rem;">
+    <p style="margin-top:2rem; text-align:center; font-size:0.9rem; color:var(--text-secondary);">
       Existing user? <a href="{% url 'login' %}">Log In</a>
     </p>
   </div>
